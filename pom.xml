@@ -56,7 +56,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <start-class>com.scc.zipkinsvr.ZipkinServerApplication</start-class>
     <java.version>1.8</java.version>
-    <docker.image.name>centralecanine/scc-zipkinsvr</docker.image.name>
+    <docker.image.name>anthonydenecheau/scc-zipkinsvr</docker.image.name>
     <docker.image.tag>version1.0</docker.image.tag>
   </properties>
 
