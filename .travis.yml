@@ -1,7 +1,7 @@
 language: java
 cache:
   directories:
-  - $HOME/.m2
+  - "$HOME/.m2"
 jdk:
 - oraclejdk8
 sudo: required
@@ -18,10 +18,11 @@ env:
   global:
   - secure: EifioaeALRxeDgkqyP4enXAK5YGos1R3fbnzC2aLX5LlfMQCO8rc7Qg+JijyHBCy7mkVeDA9V9qkbLAXOjMyay9jH8AktOW1ftK413ORy3K9wDXeIzFTr5DCKoJwKk02KOXve7/pV42KZsm6el79giQlpQN7UaDsFs8OMtAqb46CzRLW2vnSOhJQKZKt9ze4bsPAEGip6dK9rLvwAGo/FEuuro2y/XmZ2RpoCUbTWJnlfUO1la0NabwQO/5QQOe8/mIi/EAUBJzUxslmXIUzPC9K2wJlTEeh/1A+sGZN9DB0DihNA7L23GFZXygnVi2c/MwcX8Yyfm9zY73CbLWIQTWEA3PfeccjtpforZdjJlWKNeclqQDVPR4b90CbvCSv7t7N6t2LsvFd6+HuWFK2nhtOtgigVdwyeDt34qqAaKjfVWV1fzY2+8YOcBILNDZMQTDm9I0mvayxsXpTFK6L6gxRlG3J/3IOGR3Cu3n9Bq7u5RZmznBjFvg6+CoM0yDP8UrFwXVSm2To+7UwHJkgVfizBB3IbyAxRAaLIeQm11t7ZqOltAY4GsM1Se8xBd7U3uYVVAxRjVRBt8Oqm5gykxzt9S950xuquOV9d235A9wW0DcdDqsSE5NxE6se/tSBHHfiHmjGP8xCdQcO8FRz+mq5XesgE1OIhGHBoIHD4HI=
   - secure: 1Ar4ZBEvUPB1BC4G3BCoEywr0+kPlFLBtasuC3C0s0NuTupfPoPaMb+WohdYMK19DmztTZL4GoIzl1W5vBRYiClS4f1RJveey65k4G92tqWVDK0L68spCK5DSY+oVu8vtkf5anzuLo7ksM1xEGQ0puRCFQmGyjkwzb2BXkHx8qXdjNfttOSV+fs++vZxtP/NNCa7xUz0uhezjbA6qda9ulKLo2OdsnQ9+pbJOJkYYkyM8nvH+JgrP1va87SRn+VKeF1WgzUp7Ox+mAyBtDzbL/y2ds7XMN6nTWVU7HLl7U8hP9GZ383YDW7FxpuSDcvNLXPRPULwIH5zt6kReBitxFE7A8vPuRxpxtHmGzXkb2ne4VdZoJ1nh5A/AnUZsaNeo11+WKxNL+gCqnYwafoFS+xEdgbDovMYwB8OEDv3E6L9cX56b/ssVzuG6aZ7NUj9kKp8OzUI8kUYVJH7yp2CLR4PlnbvHoBU2Hq9Svn+ecxuQDucJn4t6HV282LgXse60TW+P1VE5Osx28EXTNnImUCEAT/6Mumqz/ARmFM6YJJ2ZB0DJbZIwDmIk+qDz88mlgkaNSXlGKQ67BeGeXRPQdCDDdK7qu0DRlsW4quserB1AgFCbuff4YKxav4JnQvckkkK6S9M+lbEVVzesP3ZLo+hqeKOF7ikddo4XO6b0L4=
-  matrix:
-  - SCC_DOCKER_IMAGE=anthonydenecheau/scc-zipkinsvr:version1.0
+  - secure: 4x6GngIETREtJrhbyuxpTAAag9I74AEY/nw0VSlXgJo84dmihlK64rmSRL2uWDAaj8bcKxsxoRbCPHHVg+DJ0oDyygtp8zgBQqrQGWYo0vJmz/tFMQvTxU7MJlafBRTwPSfFaeGAtPQtxDACFdYPAxM9xW268ATYgx1lfwB/GYcgNIR7wBThmV15pVrTcBWKCEDumb2/BhitGeOWz92+4oYPB/odqEevh9/GlfCbNpgb43Sm4x3to6p3Yr+tYS7WWtvJC64UoowFGlFnEwKtyogFSicfTcMvlkH8QRG3dw5QpcpEq5gjmNCnQMkicIrDmXF8wsQ74WbdwdKdc8ExOJBP1pLV2gVzOXVo5Vvw+CsrvZWGqSDs5HHAUNc0mEXyQ2cmdFnaiinCoFx4vR5t04hLZ85R89sMGM4sQIh4llHAwmaAQqxYGV/C3ET8wlYAV0rdpiOVlc+pca0ycf32vSLdj0mqofI9q4Tm5a3wmpCiE5x7IURLie5WFc6PZ5omKH9XNllNEDi5gQp6NFthIzDem3lM1mtBCimQ51LcNxDr0LAxzJvwoxXC1Y6VAD2/zdVMZEegnfBhwq0IMW1FihDZVC5tcMkUkRzjZcQynvB3YLIPsoHE/C34PfftZe984M0xZW1mIQHS9IwhfhT0x5y2XfxLUXiRAtOfdqXbHZE=
+before_install:
+- gem install travis -v 1.8.5 --no-rdoc --no-ri
+- export BUILD_NAME=scc-zipkinsvr-$TRAVIS_BRANCH-$(date -u "+%Y%m%d%H%M%S")-$TRAVIS_BUILD_NUMBER
 script:
-- docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-- mvn clean package docker:build
-- docker push $SCC_DOCKER_IMAGE
-  
+- sh scripts/travis/tag_build.sh
+- sh scripts/travis/build_services.sh
+- sh scripts/travis/deploy_to_docker_hub.sh
